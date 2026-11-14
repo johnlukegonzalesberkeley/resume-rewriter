@@ -136,6 +136,16 @@ def test_unparseable_model_reply_shows_what_the_model_said(monkeypatch):
     assert "Sure! Here you go" in res.json()["detail"]
 
 
+def test_timeout_becomes_a_504_with_plain_message(monkeypatch):
+    def slow(*a, **k):
+        raise main.LLMTimeout("took too long")
+
+    monkeypatch.setattr(main, "call_llm", slow)
+    res = client.post("/rewrite", json={"resume_text": RESUME, "job_description": "x"})
+    assert res.status_code == 504
+    assert "too long" in res.json()["detail"]
+
+
 def test_rate_limit_becomes_a_429_with_plain_message(monkeypatch):
     from google.genai import errors
 

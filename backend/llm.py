@@ -86,6 +86,16 @@ def _reply_text(response) -> str:
     return "\n".join(p.text for p in _parts(response) if getattr(p, "text", None))
 
 
+class LLMTimeout(Exception):
+    """The model didn't answer within the timeout."""
+
+
+def _is_timeout(exc: Exception) -> bool:
+    # Match by class name instead of importing an HTTP library: different versions of the
+    # Gemini SDK use different ones (httpx, httpx2), and each has its own TimeoutException.
+    return any("timeout" in cls.__name__.lower() for cls in type(exc).__mro__)
+
+
 class EmptyReply(Exception):
     """The model returned no text. The message says why, when Gemini tells us."""
 
@@ -175,4 +185,8 @@ def call_llm(system: str, user: str, mock_response: str | None = None) -> str:
             if e.code in RETRY_CODES and attempt < MAX_ATTEMPTS:
                 time.sleep(2**attempt)
                 continue
+            raise
+        except Exception as e:
+            if _is_timeout(e):
+                raise LLMTimeout(str(e)) from e
             raise

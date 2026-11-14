@@ -1,14 +1,13 @@
 import json
 import os
 
-import httpx
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from google.genai import errors as genai_errors
 from pydantic import ValidationError
 
-from llm import MOCK, EmptyReply, call_llm
+from llm import MOCK, EmptyReply, LLMTimeout, call_llm
 from mock import build_mock_regenerate, build_mock_rewrites
 from models import BulletRewrite, RegenerateRequest, RewriteRequest, RewriteResponse
 from pdf_text import MAX_PDF_BYTES, PdfProblem, extract_pdf_text
@@ -84,7 +83,7 @@ def ask_llm(system: str, user: str, mock_response: str | None = None) -> dict:
             detail=f"The model returned an empty reply ({e}). Try again, or set "
             "GEMINI_THINKING_BUDGET=0 in backend/.env and restart the backend.",
         )
-    except httpx.TimeoutException:
+    except LLMTimeout:
         raise HTTPException(
             status_code=504,
             detail="Gemini took too long to respond (over 30 seconds). Try again in a moment.",

@@ -111,3 +111,25 @@ def test_a_truly_empty_reply_raises_with_a_reason(monkeypatch):
     with pytest.raises(llm.EmptyReply) as info:
         llm.call_llm("s", "u")
     assert "MAX_TOKENS" in str(info.value)
+
+
+def test_a_timeout_from_any_http_library_becomes_llm_timeout(monkeypatch):
+    # Different SDK versions use different HTTP libraries, each with its own timeout class.
+    class ReadTimeout(Exception):
+        pass
+
+    def fake(*a):
+        raise ReadTimeout("took too long")
+
+    monkeypatch.setattr(llm, "_generate", fake)
+    with pytest.raises(llm.LLMTimeout):
+        llm.call_llm("s", "u")
+
+
+def test_unrelated_errors_are_not_mistaken_for_timeouts(monkeypatch):
+    def fake(*a):
+        raise ValueError("something else")
+
+    monkeypatch.setattr(llm, "_generate", fake)
+    with pytest.raises(ValueError):
+        llm.call_llm("s", "u")

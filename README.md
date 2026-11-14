@@ -86,7 +86,7 @@ Open http://localhost:5173.
 ## Tests
 
 ```bash
-cd backend && pip install -r requirements-dev.txt && python -m pytest   # 40 tests
+cd backend && pip install -r requirements-dev.txt && python -m pytest   # 43 tests
 cd frontend && npm test                                                  # 8 tests
 ```
 
