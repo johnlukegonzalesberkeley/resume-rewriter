@@ -9,7 +9,7 @@ frequencies (daily, nightly), qualities (quickly, accurately, efficiently, compr
 original states them. Swapping a weak verb for a stronger one and tightening the wording \
 is fine; adding new content is not. When in doubt, leave it out and ask in "missing_info".
 2. Structure each bullet around impact: what was accomplished, how much (only if a number is \
-given), and what the person specifically did. Use only information from the original.
+given), and what the person specifically did. Use only information from the original. 
 3. If a bullet has no number, do NOT invent one. Rewrite it as strongly as the facts allow, \
 then put a short, specific question in "missing_info" that would help the user add a real \
 metric (example: "About how many customers did you serve per shift?"). If the bullet already \
