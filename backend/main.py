@@ -1,4 +1,5 @@
 import json
+import httpx
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -41,6 +42,11 @@ def rewrite(req: RewriteRequest):
     except genai_errors.APIError as e:
         raise HTTPException(status_code=502, detail=f"Gemini API error: {e}")
 
+    except httpx.TimeoutException:
+        raise HTTPException(
+            status_code=504,
+            detail="Gemini took too long to respond (over 30 seconds). Try again in a moment.",
+        )
     try:
         return RewriteResponse(**extract_json(raw))
     except (ValueError, json.JSONDecodeError, ValidationError) as e:
