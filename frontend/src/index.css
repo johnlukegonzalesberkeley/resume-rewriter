@@ -1,8 +1,43 @@
-body {
-  margin: 0;
-  background: #ffffff;
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300..900&display=swap");
+
+:root {
+  /* Surfaces: white page, soft lavender panels */
+  --bg: #ffffff;
+  --surface: #f6f1fd;
+  --surface-2: #eadffb;
+  --line: #d5c6ee;
+
+  /* Text: royal purple */
+  --text: #5b2a9e;
+  --muted: #7a5cb0;
+  --placeholder: #7f65b5;
+  --ink: #2a1250; /* dark text that sits on bright highlight colors */
+  --on-accent: #ffffff; /* text that sits on royal purple */
+
+  /* Colors that each carry one meaning */
+  --add: #5cf2a8; /* words added / accepted */
+  --remove: #ff7a85; /* words removed / rejected */
+  --need-bg: #fff3bf; /* the app needs a detail from you */
+  --need-line: #e6c200;
+  --need-text: #6b4800;
+  --accent: #d9c4ff; /* "updated with your detail" */
+
+  color-scheme: light;
 }
 
 * {
   box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Rubik", system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--ink);
 }

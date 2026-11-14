@@ -1,5 +1,16 @@
+# Secrets and local config (the .env.example files ARE committed)
+.env
+.env.local
+
+# Python
 .venv/
 __pycache__/
-.env
-.DS_Store
+*.pyc
+.pytest_cache/
+
+# Node
 node_modules/
+dist/
+
+# macOS
+.DS_Store
